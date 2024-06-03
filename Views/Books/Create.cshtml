@@ -1,0 +1,58 @@
+﻿@using bookStore.ViewModel
+@model BookFormVM
+@section Title {
+    Books
+}
+@section subTitle {
+    Add book
+}
+
+<form asp-controller="Books" asp-action="Create" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Name">Name</label>
+        <input class="form-control" asp-for="Name" />
+        <span class="text-danger" asp-validation-for="Name"></span>
+        </div>
+
+    <div class="form-group">
+        <label asp-for=AutherId></label>
+        <select asp-for="AutherId" class="form-control" asp-items="@Model.Authers" ></select>
+        <span class="text-danger" asp-validation-for="AutherId"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Publisher"></label>
+        <input type= "text" class="form-control" asp-for="Publisher" />
+        <span class="text-danger" asp-validation-for="Publisher"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PublishDate"></label>
+        <input type="date" class="form-control" asp-for="PublishDate" />
+        <span class="text-danger" asp-validation-for="PublishDate"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ImageUrl"></label>
+        <input type="file" class="form-control" asp-for="ImageUrl" />
+        <span class="text-danger" asp-validation-for="ImageUrl"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <input type="text" class="form-control" asp-for="Description" />
+        <span class="text-danger" asp-validation-for="Description"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SelectedCategories"></label>
+        <select class="form-control" asp-for="SelectedCategories" asp-items="@Model.Categories"><</select>
+
+        <span class="text-danger" asp-validation-for="SelectedCategories"></span>
+    </div>
+
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">
+               Add
+            </button>
+        </div>
+</form>

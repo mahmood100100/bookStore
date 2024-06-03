@@ -224,6 +224,86 @@ namespace bookStore.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("bookStore.Models.Auther", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Authers");
+                });
+
+            modelBuilder.Entity("bookStore.Models.Book", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AutherId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("PublishDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Publisher")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AutherId");
+
+                    b.ToTable("Books");
+                });
+
+            modelBuilder.Entity("bookStore.Models.BookCategory", b =>
+                {
+                    b.Property<int>("categoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("bookId")
+                        .HasColumnType("int");
+
+                    b.HasKey("categoryId", "bookId");
+
+                    b.HasIndex("bookId");
+
+                    b.ToTable("BookCategories");
+                });
+
             modelBuilder.Entity("bookStore.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -244,6 +324,9 @@ namespace bookStore.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Categories");
                 });
@@ -297,6 +380,46 @@ namespace bookStore.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("bookStore.Models.Book", b =>
+                {
+                    b.HasOne("bookStore.Models.Auther", "Auther")
+                        .WithMany()
+                        .HasForeignKey("AutherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Auther");
+                });
+
+            modelBuilder.Entity("bookStore.Models.BookCategory", b =>
+                {
+                    b.HasOne("bookStore.Models.Book", "books")
+                        .WithMany("Categories")
+                        .HasForeignKey("bookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("bookStore.Models.Category", "categories")
+                        .WithMany("Books")
+                        .HasForeignKey("categoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("books");
+
+                    b.Navigation("categories");
+                });
+
+            modelBuilder.Entity("bookStore.Models.Book", b =>
+                {
+                    b.Navigation("Categories");
+                });
+
+            modelBuilder.Entity("bookStore.Models.Category", b =>
+                {
+                    b.Navigation("Books");
                 });
 #pragma warning restore 612, 618
         }

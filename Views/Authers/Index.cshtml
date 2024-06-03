@@ -1,0 +1,128 @@
+﻿@using bookStore.ViewModel
+@model List<AutherVM>
+@section Title {
+    Authers
+}
+@section subTitle {
+    Show Authers
+}
+@section buttons {
+    <a class="btn btn-outline-info" asp-controller="Authers" asp-action="Create">Creat</a>
+}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">All Authers</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th style="width: 10px">Id</th>
+                    <th>Auther Name</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                    <th>Actions</th>
+                    <th>Progress</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+                        <td>@item.CreatedAt</td>
+                        <td>@item.UpdatedAt</td>
+                        <td class="actions">
+                            <a class="edit btn btn-primary"
+                               asp-controller="Authers" asp-action="Edit"
+                               asp-route-Id=@item.Id
+                               data-id=@item.Id>
+                                Edit
+                            </a>
+                            <a class="details btn btn-primary"
+                               asp-controller="Authers" asp-action="Details"
+                               asp-route-Id=@item.Id
+                               data-id=@item.Id>
+                                Details
+                            </a>
+                            <button class="delete btn btn-primary"
+                                    asp-route-Id=@item.Id
+                                    data-id=@item.Id>
+                                Delete
+                            </button>
+                        </td>
+                        <td>
+                            <div class="progress progress-xs">
+                                <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer clearfix">
+        <ul class="pagination pagination-sm m-0 float-right">
+            <li class="page-item"><a class="page-link" href="#">«</a></li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">»</a></li>
+        </ul>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "btn btn-success",
+                cancelButton: "btn btn-danger"
+            },
+            buttonsStyling: false
+        });
+
+        const deleteButtons = document.querySelectorAll(".actions .delete");
+        deleteButtons.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                swalWithBootstrapButtons.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel!",
+                    reverseButtons: true
+                }).then(async (result) => {
+                    if (result.value) {
+                        const id = btn.dataset.id;
+                        const response = await fetch(`/Authers/Delete/${id}`, {
+                            method: 'POST'
+                        });
+                        if (response.ok) {
+                            btn.closest("tr").remove();
+                            swalWithBootstrapButtons.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success"
+                            });
+                        }
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire({
+                            title: "Cancelled",
+                            text: "Your imaginary file is safe :)",
+                            icon: "error"
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+
+
+}

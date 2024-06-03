@@ -1,0 +1,33 @@
+﻿@using bookStore.ViewModel
+@model AutherVM
+
+@section Title {
+    Authers
+}
+
+@section subTitle {
+    Auther Details
+}
+
+<div class="card">
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th style="width: 10px">Id</th>
+                    <th>Auther Name</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Model.Id</td>
+                    <td>@Model.Name</td>
+                    <td>@Model.CreatedAt</td>
+                    <td>@Model.UpdatedAt</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
